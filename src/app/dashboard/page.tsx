@@ -15,7 +15,7 @@ import { useWinnings, WinningRecord } from "@/hooks/useWinnings";
 export default function Dashboard() {
   const { user, refreshUser, loading } = useAuth();
   const { scores, fetching, submitScore, deleteScore, updateScore, error: scoreError } = useScores();
-  const { stats, loading: statsLoading } = useDashboardStats();
+  const { stats, loading: statsLoading, updateContribution } = useDashboardStats();
   const { winnings, submitProof } = useWinnings();
   const router = useRouter();
 
@@ -24,6 +24,14 @@ export default function Dashboard() {
   const [editingValue, setEditingValue] = useState("");
   const [showProofModal, setShowProofModal] = useState<string | null>(null);
   const [proofUrl, setProofUrl] = useState("");
+  const [contributionPercentage, setContributionPercentage] = useState(10);
+  const [isUpdatingContribution, setIsUpdatingContribution] = useState(false);
+
+  useEffect(() => {
+    if (stats?.charity?.percentage) {
+      setContributionPercentage(stats.charity.percentage);
+    }
+  }, [stats]);
 
   useEffect(() => {
     if (!loading) {
@@ -134,12 +142,47 @@ export default function Dashboard() {
                   <div className="text-2xl font-black text-slate-900">{stats?.charity?.percentage}%</div>
                 </div>
               </div>
-              <Link
-                href="/charities"
-                className="inline-flex items-center gap-2 text-slate-400 font-black text-xs hover:text-emerald-600 transition-colors pt-2"
-              >
-                Change Recipient <ArrowUpRight className="w-4 h-4" />
-              </Link>
+              <div className="pt-6 mt-4 border-t border-slate-100">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Increase Impact</div>
+                  <div className={`text-sm font-black transition-all ${isUpdatingContribution ? 'text-emerald-500 scale-110' : 'text-slate-900'}`}>
+                    {contributionPercentage}%
+                  </div>
+                </div>
+                <input 
+                  type="range"
+                  min="10"
+                  max="100"
+                  step="5"
+                  value={contributionPercentage}
+                  onChange={(e) => setContributionPercentage(parseInt(e.target.value))}
+                  onMouseUp={async () => {
+                    setIsUpdatingContribution(true);
+                    const success = await updateContribution(contributionPercentage);
+                    if (success) toast.success(`Contribution updated to ${contributionPercentage}%!`);
+                    setIsUpdatingContribution(false);
+                  }}
+                  onTouchEnd={async () => {
+                    setIsUpdatingContribution(true);
+                    const success = await updateContribution(contributionPercentage);
+                    if (success) toast.success(`Contribution updated to ${contributionPercentage}%!`);
+                    setIsUpdatingContribution(false);
+                  }}
+                  className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                />
+                <p className="text-[9px] font-bold text-slate-400 mt-2 text-center uppercase tracking-tighter">
+                  Every % increased directly amplifies your charity&apos;s total raised
+                </p>
+              </div>
+
+              <div className="flex justify-center pt-4">
+                <Link
+                  href="/charities"
+                  className="inline-flex items-center gap-2 text-slate-400 font-black text-xs hover:text-emerald-600 transition-colors"
+                >
+                  Change Selection <ArrowUpRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </section>
 

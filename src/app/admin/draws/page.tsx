@@ -246,9 +246,9 @@ export default function AdminDraws() {
                                         {draw.draw_type}
                                     </span>
                                 </div>
-                                <div className="flex gap-2.5">
+                                <div className="flex flex-wrap gap-2 sm:gap-2.5">
                                     {draw.winning_numbers.map((n, i) => (
-                                        <div key={i} className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-sm font-black text-slate-900 shadow-sm">
+                                        <div key={i} className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-sm font-black text-slate-900 shadow-sm shrink-0">
                                             {n}
                                         </div>
                                     ))}
