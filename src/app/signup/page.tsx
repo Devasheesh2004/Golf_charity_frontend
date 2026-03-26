@@ -199,9 +199,12 @@ function SignupContent() {
                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-all ${formData.charity_recipient === charity.id ? 'bg-emerald-600 text-white shadow-lg' : 'bg-white text-slate-400 group-hover:bg-rose-50 group-hover:text-rose-500'}`}>
                                <Heart className={`w-6 h-6 ${formData.charity_recipient === charity.id ? 'fill-current' : ''}`} />
                              </div>
-                             <h4 className={`text-sm font-black leading-tight ${formData.charity_recipient === charity.id ? 'text-slate-900 border-b-2 border-emerald-500/30' : 'text-slate-500 group-hover:text-slate-900'}`}>{charity.name}</h4>
+                             <h4 className={`text-[13px] font-black leading-tight ${formData.charity_recipient === charity.id ? 'text-slate-900 border-b-2 border-emerald-500/30' : 'text-slate-500 group-hover:text-slate-900'}`}>{charity.name}</h4>
+                             <p className={`text-[10px] font-medium mt-1 transition-opacity ${formData.charity_recipient === charity.id ? 'text-emerald-700 opacity-90' : 'text-slate-400 opacity-0 group-hover:opacity-100'}`}>
+                                {charity.description || "Improving lives through golf"}
+                             </p>
                              {formData.charity_recipient === charity.id && (
-                                <div className="absolute top-3 right-3">
+                                <div className="absolute top-3 right-3 animate-in zoom-in duration-300">
                                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                                 </div>
                              )}
